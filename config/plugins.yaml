@@ -5,10 +5,11 @@
 # Startup
 # -------
 - repo: Shougo/dein.vim
-- repo: rafi/awesome-vim-colorschemes
-- repo: rafi/vim-badge
+- repo: jasonwhite/vim-whitenight
+- repo: vim-airline/vim-airline
+  hook_add: |
+    let g:airline_powerline_fonts = 1
 - repo: thinca/vim-localrc
-- repo: christoomey/vim-tmux-navigator
 - repo: junegunn/vim-peekaboo
 - repo: tpope/vim-sleuth
 - repo: itchyny/vim-gitbranch
@@ -18,6 +19,17 @@
     autocmd MyAutoCmd FileType denite,qf,nerdtree let b:cursorword=0
     autocmd MyAutoCmd InsertEnter * let b:cursorword=0
     autocmd MyAutoCmd InsertLeave * let b:cursorword=1
+- repo: autozimu/LanguageClient-neovim
+  if: has('nvim')
+  rev: 'next'
+  build: 'bash install.sh'
+  hook_add: |
+    let g:LanguageClient_loggingFile = '/tmp/LanguageClient.log'
+    let g:LanguageClient_loggingLevel = 'INFO'
+    let g:LanguageClient_serverStderr = '/tmp/LanguageServer.log'
+    let g:LanguageClient_serverCommands = {
+      \ 'rust': ['rustup', 'run', 'stable', 'rls'],
+      \ }
 
 # Lazy Loading
 # ==========================================
@@ -210,72 +222,9 @@
       \|   endif
       \| endif
 
-- repo: MattesGroeger/vim-bookmarks
-  on_path: .*
-  hook_source: |
-    let g:bookmark_auto_save_file = $VARPATH.'/bookmarks'
-    let g:bookmark_no_default_key_mappings = 1
-    let g:bookmark_disable_ctrlp = 1
-
 - repo: rhysd/committia.vim
   on_path: COMMIT_EDITMSG
   hook_source: let g:committia_min_window_width = 70
-
-- repo: benekastah/neomake
-  if: has('nvim') && empty($VIM_MINIMAL)
-  on_cmd: Neomake
-  hook_source: source $VIMPATH/config/plugins/neomake.vim
-  hook_add: |
-    let g:lint_filetypes = [
-      \  'yaml.ansible', 'python', 'php', 'ruby', 'vim', 'go', 'sh',
-      \  'javascript', 'jsx', 'javascript.jsx', 'json', 'css',
-      \  'markdown', 'html', 'yaml'
-      \ ]
-    autocmd MyAutoCmd BufWritePost *
-      \ if index(g:lint_filetypes, &filetype) > -1 && empty(&buftype)
-      \|   Neomake
-      \| elseif &filetype =~ 'html'
-      \|   Neomake tidy
-      \| endif
-
-- repo: junegunn/goyo.vim
-  if: empty($VIM_MINIMAL)
-  depends: limelight.vim
-  on_cmd: Goyo
-  hook_source: source $VIMPATH/config/plugins/goyo.vim
-
-- repo: junegunn/limelight.vim
-  if: empty($VIM_MINIMAL)
-  on_cmd: Limelight
-
-- repo: itchyny/calendar.vim
-  if: empty($VIM_MINIMAL)
-  on_cmd: Calendar
-  hook_source: |
-    let g:calendar_google_calendar = 1
-    let g:calendar_google_task = 1
-
-- repo: vimwiki/vimwiki
-  if: empty($VIM_MINIMAL)
-  on_map: { n: <Plug> }
-  on_cmd: [ VimwikiIndex, VimwikiUISelect ]
-  hook_add: |
-    let g:vimwiki_use_calendar = 1
-    let g:vimwiki_hl_headers = 1
-    let g:vimwiki_hl_cb_checked = 1
-    let g:vimwiki_autowriteall = 0
-  hook_source: |
-    let g:vimwiki_list = [
-    \   { 'diary_header': 'Diary',
-    \     'diary_link_fmt': '%Y-%m/%d',
-    \     'auto_toc': 1,
-    \     'path': '~/docs/wiki/',
-    \     'syntax': 'markdown',
-    \     'ext': '.md' },
-    \   { 'path': '~/docs/blog/',
-    \     'syntax': 'markdown',
-    \     'ext': '.md' }
-    \ ]
 
 # ==========================================
 # Completion
@@ -327,7 +276,7 @@
 - repo: mattn/emmet-vim
   if: empty($VIM_MINIMAL)
   on_i: 1
-  on_ft: [ html, css, jsx, javascript, javascript.jsx ]
+  on_ft: [ rust, html, css, jsx, javascript, javascript.jsx ]
   hook_source: |
     let g:use_emmet_complete_tag = 0
     let g:user_emmet_install_global = 0
@@ -367,44 +316,12 @@
     let g:jedi#use_splits_not_buffers = 'right'
 
 # Only NeoVim ------------------------------
-- repo: zchee/deoplete-go
-  if: has('nvim') && ! empty($GOPATH) && empty($VIM_MINIMAL)
-  build: make
-  on_ft: go
-  on_i: 1
 
 - repo: zchee/deoplete-jedi
   if: has('nvim') && empty($VIM_MINIMAL)
   on_ft: python
   on_i: 1
   hook_source: autocmd MyAutoCmd FileType python setlocal omnifunc=
-
-- repo: carlitux/deoplete-ternjs
-  build: npm install -g tern
-  if: executable('npm') && has('nvim') && empty($VIM_MINIMAL)
-  on_i: 1
-  on_ft: [ javascript, jsx, javascript.jsx ]
-  hook_source: |
-    let g:tern_request_timeout = 1
-    let g:tern_show_signature_in_pum = 0
-
-- repo: wellle/tmux-complete.vim
-  if: has('nvim') && empty($VIM_MINIMAL)
-  on_i: 1
-  hook_add: let g:tmuxcomplete#trigger = ''
-
-- repo: ternjs/tern_for_vim
-  build: npm install
-  if: executable('npm') && empty($VIM_MINIMAL)
-  on_i: 1
-  on_ft: [ javascript, jsx, javascript.jsx ]
-  hook_add: |
-    let g:tern#command = ['tern']
-    let g:tern#arguments = ['--persistent']
-    let g:tern_request_timeout = 1
-    let g:tern_show_signature_in_pum = 0
-  hook_post_source: |
-    autocmd MyAutoCmd FileType javascript setlocal omnifunc=tern#Complete
 
 # ==========================================
 # Denite
@@ -432,10 +349,6 @@
   depends: vim-operator-user
   on_map: { vnx: <Plug> }
 
-- repo: rhysd/vim-operator-surround
-  depends: [ vim-operator-user, vim-textobj-multiblock ]
-  on_map: { vnx: <Plug> }
-
 - repo: haya14busa/vim-operator-flashy
   depends: vim-operator-user
   on_map: { nx: <Plug> }
@@ -446,7 +359,6 @@
 - { repo: kana/vim-textobj-user, on_func: textobj#user# }
 - { repo: terryma/vim-expand-region, on_map: { x: <Plug> }}
 - { repo: AndrewRadev/sideways.vim, on_map: { ox: <Plug>Sideways }}
-- { repo: AndrewRadev/splitjoin.vim, on_map: { n: <Plug>Splitjoin }}
 - { repo: AndrewRadev/linediff.vim, on_cmd: Linediff }
 
 - repo: AndrewRadev/dsf.vim

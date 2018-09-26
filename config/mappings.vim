@@ -4,10 +4,12 @@
 
 " Non-standard {{{
 " ------------
+nnoremap <silent><LocalLeader>w :w<CR>
+nnoremap <silent><LocalLeader>q :q<CR>
 
 " Window-control prefix
 nnoremap  [Window]   <Nop>
-nmap      s [Window]
+"nmap      s [Window]
 
 " Fix keybind name for Ctrl+Spacebar
 map <Nul> <C-Space>
@@ -71,7 +73,7 @@ cnoreabbrev bD bd
 inoremap <S-Return> <C-o>o
 
 " Quick substitute within selected area
-xnoremap s :s//g<Left><Left>
+"xnoremap s :s//g<Left><Left>
 
 nnoremap zl z5l
 nnoremap zh z5h
@@ -139,10 +141,6 @@ cmap W!! w !sudo tee % >/dev/null
 " Editor UI {{{
 " ---------
 
-" I like to :quit with 'q', shrug.
-nnoremap <silent> q :<C-u>:quit<CR>
-autocmd MyAutoCmd FileType man nnoremap <silent><buffer> q :<C-u>:quit<CR>
-
 " Macros
 nnoremap Q q
 nnoremap gQ @q
@@ -189,48 +187,6 @@ function! s:get_selection(cmdtype) "{{{
 	let @/ = substitute(escape(@s, '\'.a:cmdtype), '\n', '\\n', 'g')
 	let @s = temp
 endfunction "}}}
-
-" Background dark/light toggle and contrasts
-nnoremap <silent><Leader>b :<C-u>call <SID>toggle_background()<CR>
-nmap <silent> s- :<c-u>call <SID>toggle_contrast(-v:count1)<cr>
-nmap <silent> s= :<c-u>call <SID>toggle_contrast(+v:count1)<cr>
-
-function! s:toggle_background()
-	if ! exists('g:colors_name')
-		echomsg 'No colorscheme set'
-		return
-	endif
-	let l:scheme = g:colors_name
-
-	if l:scheme =~# 'dark' || l:scheme =~# 'light'
-		" Rotate between different theme backgrounds
-		execute 'colorscheme' (l:scheme =~# 'dark'
-					\ ? substitute(l:scheme, 'dark', 'light', '')
-					\ : substitute(l:scheme, 'light', 'dark', ''))
-	else
-		execute 'set background='.(&background ==# 'dark' ? 'light' : 'dark')
-		if ! exists('g:colors_name')
-			execute 'colorscheme' l:scheme
-			echomsg 'The colorscheme `'.l:scheme
-				\ .'` doesn''t have background variants!'
-		else
-			echo 'Set colorscheme to '.&background.' mode'
-		endif
-	endif
-endfunction
-
-function! s:toggle_contrast(delta)
-	let l:scheme = ''
-	if g:colors_name =~# 'solarized8'
-		let l:schemes = map(['_low', '_flat', '', '_high'],
-			\ '"solarized8_".(&background).v:val')
-		let l:contrast = ((a:delta + index(l:schemes, g:colors_name)) % 4 + 4) % 4
-		let l:scheme = l:schemes[l:contrast]
-	endif
-	if l:scheme !=# ''
-		execute 'colorscheme' l:scheme
-	endif
-endfunction
 
 " Location list movement
 nmap <Leader>j :lnext<CR>
@@ -314,8 +270,8 @@ nnoremap <silent> [Window]c  :close<CR>
 nnoremap <silent> [Window]x  :<C-u>call <SID>BufferEmpty()<CR>
 
 " Split current buffer, go to previous window and previous buffer
-nnoremap <silent> [Window]sv :split<CR>:wincmd p<CR>:e#<CR>
-nnoremap <silent> [Window]sg :vsplit<CR>:wincmd p<CR>:e#<CR>
+"nnoremap <silent> [Window]sv :split<CR>:wincmd p<CR>:e#<CR>
+"nnoremap <silent> [Window]sg :vsplit<CR>:wincmd p<CR>:e#<CR>
 
 function! WipeHiddenBuffers()
 	let tpbl=[]

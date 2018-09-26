@@ -83,6 +83,8 @@ augroup MyAutoCmd " {{{
 	autocmd FileType xml
 		\ setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
 
+	autocmd FileType rust setlocal textwidth=80
+
 augroup END " }}}
 
 " Internal Plugin Settings  {{{

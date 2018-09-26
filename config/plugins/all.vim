@@ -63,14 +63,14 @@ if dein#tap('tagbar')
 endif
 
 if dein#tap('nerdtree')
-	let g:NERDTreeMapOpenSplit = 'sv'
-	let g:NERDTreeMapOpenVSplit = 'sg'
-	let g:NERDTreeMapOpenInTab = 'st'
-	let g:NERDTreeMapOpenInTabSilent = 'sT'
-	let g:NERDTreeMapUpdirKeepOpen = '<BS>'
-	let g:NERDTreeMapOpenRecursively = 't'
-	let g:NERDTreeMapCloseChildren = 'T'
-	let g:NERDTreeMapToggleHidden = '.'
+	" let g:NERDTreeMapOpenSplit = 'sv'
+	" let g:NERDTreeMapOpenVSplit = 'sg'
+	" let g:NERDTreeMapOpenInTab = 'st'
+	" let g:NERDTreeMapOpenInTabSilent = 'sT'
+	" let g:NERDTreeMapUpdirKeepOpen = '<BS>'
+	" let g:NERDTreeMapOpenRecursively = 't'
+	" let g:NERDTreeMapCloseChildren = 'T'
+	" let g:NERDTreeMapToggleHidden = '.'
 
 	nnoremap <silent> <LocalLeader>e :<C-u>NERDTreeToggle<CR>
 	nnoremap <silent> <LocalLeader>a :<C-u>NERDTreeFind<CR>
@@ -88,15 +88,6 @@ if dein#tap('emmet-vim')
 	autocmd MyAutoCmd FileType html,css,jsx,javascript,javascript.jsx
 		\ EmmetInstall
 		\ | imap <buffer> <C-Return> <Plug>(emmet-expand-abbr)
-endif
-
-if dein#tap('vim-operator-surround')
-	map <silent>sa <Plug>(operator-surround-append)
-	map <silent>sd <Plug>(operator-surround-delete)
-	map <silent>sr <Plug>(operator-surround-replace)
-	nmap <silent>saa <Plug>(operator-surround-append)<Plug>(textobj-multiblock-i)
-	nmap <silent>sdd <Plug>(operator-surround-delete)<Plug>(textobj-multiblock-a)
-	nmap <silent>srr <Plug>(operator-surround-replace)<Plug>(textobj-multiblock-a)
 endif
 
 if dein#tap('vim-operator-replace')
@@ -283,13 +274,6 @@ if dein#tap('sideways.vim')
 	xmap <silent> i, <Plug>SidewaysArgumentTextobjI
 endif
 
-if dein#tap('splitjoin.vim')
-	let g:splitjoin_join_mapping = ''
-	let g:splitjoin_split_mapping = ''
-	nmap sj :SplitjoinJoin<CR>
-	nmap sk :SplitjoinSplit<CR>
-endif
-
 if dein#tap('linediff.vim')
 	vnoremap ,df :Linediff<CR>
 	vnoremap ,da :LinediffAdd<CR>
@@ -314,17 +298,17 @@ if dein#tap('vim-commentary')
 endif
 
 if dein#tap('vim-easymotion')
-	nmap ss <Plug>(easymotion-s2)
-	nmap sd <Plug>(easymotion-s)
-	nmap sf <Plug>(easymotion-overwin-f)
-	map  sh <Plug>(easymotion-linebackward)
-	map  sl <Plug>(easymotion-lineforward)
+	" nmap sd <Plug>(easymotion-s)
+	" nmap ss <Plug>(easymotion-s2)
+	" nmap sf <Plug>(easymotion-overwin-f)
+	" map  sh <Plug>(easymotion-linebackward)
+	" map  sl <Plug>(easymotion-lineforward)
 	" map  sj <Plug>(easymotion-j)
 	" map  sk <Plug>(easymotion-k)
-	map  s/ <Plug>(easymotion-sn)
-	omap s/ <Plug>(easymotion-tn)
-	map  sn <Plug>(easymotion-next)
-	map  sp <Plug>(easymotion-prev)
+	" map  s/ <Plug>(easymotion-sn)
+	" omap s/ <Plug>(easymotion-tn)
+	" map  sn <Plug>(easymotion-next)
+	" map  sp <Plug>(easymotion-prev)
 endif
 
 if dein#tap('vim-textobj-multiblock')
@@ -339,6 +323,11 @@ if dein#tap('vim-textobj-function')
 	omap <silent> if <Plug>(textobj-function-i)
 	xmap <silent> af <Plug>(textobj-function-a)
 	xmap <silent> if <Plug>(textobj-function-i)
+endif
+
+if dein#tap('LanguageClient-neovim')
+	nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+	nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 endif
 
 " vim: set ts=2 sw=2 tw=80 noet :

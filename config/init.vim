@@ -81,6 +81,7 @@ let g:loaded_vimball = 1
 let g:loaded_vimballPlugin = 1
 let g:loaded_zip = 1
 let g:loaded_zipPlugin = 1
+let g:powerline_loaded = 1
 " }}}
 
 " vim: set foldmethod=marker ts=2 sw=2 tw=80 noet :
